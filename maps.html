@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Google Maps API Example</title>
+    <style>
+      /* Set the height of the map container */
+      #map {
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="directions-panel"></div>
+    <button id="open-in-maps">Open in Google Maps</button>
+    <script>
+      function initMap() {
+        // Create a new map object and center it on a specific location
+        const map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 13.048418, lng: 80.227535 },
+          zoom: 12,
+        });
+
+        // Create a new DirectionsService object
+        const directionsService = new google.maps.DirectionsService();
+
+        // Create a new DirectionsRenderer object and set it to display on the map
+        const directionsRenderer = new google.maps.DirectionsRenderer({
+          map: map,
+          panel: document.getElementById("directions-panel"),
+        });
+
+        // Define the origin and destination locations
+        const origin = "kodambakkam";
+        const destination = "kodambakkam";
+        const waypoints = [
+          { location: "ambattur", stopover: true },
+          { location: "vandalur", stopover: true },
+          { location: "nungambakkam", stopover: true },
+          { location: "adayar", stopover: true },
+          { location: "Kamala cinemas", stopover: true },
+          { location: "kilpauk", stopover: true },
+        ];
+
+        // Create a request object for the directions
+        const request = {
+          origin: origin,
+          destination: destination,
+          waypoints: waypoints,
+          optimizeWaypoints: true,
+          travelMode: "DRIVING",
+        };
+
+        // Call the DirectionsService API to get the directions
+        directionsService.route(request, (response, status) => {
+          if (status === "OK") {
+            // Display the directions on the map
+            directionsRenderer.setDirections(response);
+
+            // Get the link to the route
+            const routeLink = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&waypoints=${waypoints
+              .map((waypoint) => waypoint.location)
+              .join("|")}`;
+
+            // Set the href of the button to the route link
+            document.getElementById("open-in-maps").href = routeLink;
+          } else {
+            // Handle any errors that occurred
+            window.alert("Directions request failed due to " + status);
+          }
+        });
+      }
+    </script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCiw-PGA66MTl2ypj6tzzSP8Zi1vObk5cc&callback=initMap"
+      async
+      defer
+    ></script>
+  </body>
+</html>
