@@ -59,11 +59,12 @@
 
             // Get the link to the route
             const routeLink = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&waypoints=${waypoints
-              .map((waypoint) => waypoint.location)
-              .join("|")}`;
+              .map((waypoint) => waypoint.location.replace(/\s+/g, "+"))
+              .join("|")}&optimizeWaypoints=true`;
 
             // Set the href of the button to the route link
             document.getElementById("open-in-maps").href = routeLink;
+            console.log(routeLink);
           } else {
             // Handle any errors that occurred
             window.alert("Directions request failed due to " + status);
